@@ -58,7 +58,63 @@ from random import choice
 ### Ajouter ici les signes de ponctuation Ã  retirer
 PONC = ["!", '"', "'", ")", "(", ",", ".", ";", ":", "?", "-", "_"]
 
+
 ###  Vous devriez inclure vos classes et mÃ©thodes ici, qui seront appellÃ©es Ã  partir du main
+class Text:
+    listMot = []
+
+    def __init__(self, Auteur):
+        self.auteur = Auteur
+
+    def __openText__(self):
+        listText = self.auteur.__getlisttext__()
+        for text in listText:
+            path = "C:\\Users\\adamb\\Documents\\APP5-S2\\bela1003-fauj3006\\TextesPourEtudiants\\"+auteur.__getnom__()+ "\\"+text
+            file = open(path, "r")
+            for line in file:
+
+                for caract in line:
+                    if caract.isupper():
+                        caract.lower()
+                    if (ascii(57) < caract < ascii(48)) or (ascii(122) < caract < ascii(97)):
+                        caract = ' '
+
+            word = line.split(' ')
+            for word1 in word:
+                alreadyIn = False
+                for word2 in self.listMot:
+                    if word2 == word1:
+                        alreadyIn = True
+                if not alreadyIn:
+                    self.listMot.append(word1)
+            print(*self.listMot)
+
+
+class Unigramme:
+    listFrequenceMot = {}
+
+
+class Bigramme:
+    listFrequenceSequence = {}
+
+
+class Auteur:
+    nom = ""
+    listText = []
+
+    def __init__(self, Path, Nom):
+        directory = Path + '\\' + Nom
+        self.nom = Nom
+        for entry in os.listdir(directory):
+            if os.path.isfile(os.path.join(directory, entry)):
+                if entry != '.DS_Store':
+                    self.listText.append(entry)
+
+    def __getlisttext__(self):
+        return self.listText
+
+    def __getnom__(self):
+        return self.nom
 
 
 ### Main: lecture des paramÃ¨tres et appel des mÃ©thodes appropriÃ©es
@@ -67,7 +123,7 @@ PONC = ["!", '"', "'", ")", "(", ",", ".", ";", ":", "?", "-", "_"]
 ###             Certains paramÃ¨tres sont obligatoires ("required=True")
 ###             Ces paramÃ¨tres doivent Ãªtres fournis Ã  python lorsque l'application est exÃ©cutÃ©e
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(prog='markov_cip1_cip2.py')
+    parser = argparse.ArgumentParser(prog='markov_bela1003-fauj3006.py')
     parser.add_argument('-d', required=True, help='Repertoire contenant les sous-repertoires des auteurs')
     parser.add_argument('-a', help='Auteur a traiter')
     parser.add_argument('-f', help='Fichier inconnu a comparer')
@@ -129,3 +185,6 @@ if __name__ == "__main__":
             print("    " + aut[-1])
 
 ### Ã€ partir d'ici, vous devriez inclure les appels Ã  votre code
+auteur = Auteur(args.d, args.a)
+text = Text(auteur)
+text.__openText__()
