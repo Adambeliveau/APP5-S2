@@ -55,44 +55,116 @@ from pathlib import Path
 from random import randint
 from random import choice
 import time
+from operator import itemgetter
 
 ### Ajouter ici les signes de ponctuation Ã  retirer
 from typing import List, Any, Union
 
-PONC = ["!", '"', "'", ")", "(", ",", ".", ";", ":", "?", "-", "_", '\n']
+PONC = ["!", '"', "'", ")", "(", ",", ".", ";", ":", "?", "-", "_", "*", '\n']
 
 
 ###  Vous devriez inclure vos classes et mÃ©thodes ici, qui seront appellÃ©es Ã  partir du main
+def mergeSort(arr):
+    if len(arr) > 1:
+        mid = len(arr) // 2  # Finding the mid of the array
+        L = arr[:mid]  # Dividing the array elements
+        R = arr[mid:]  # into 2 halves
+
+        mergeSort(L)  # Sorting the first half
+        mergeSort(R)  # Sorting the second half
+
+        i = j = k = 0
+
+        # Copy data to temp arrays L[] and R[]
+        while i < len(L) and j < len(R):
+            if L[i] > R[j]:
+                arr[k] = L[i]
+                i += 1
+            else:
+                arr[k] = R[j]
+                j += 1
+            k += 1
+
+        # Checking if any element was left
+        while i < len(L):
+            arr[k] = L[i]
+            i += 1
+            k += 1
+
+        while j < len(R):
+            arr[k] = R[j]
+            j += 1
+            k += 1
+
+
 class Text:
+    def __init__(self):
+        self.Sorted = dict()
 
-    def __init__(self, auteur):
-        self.auteur = auteur
-
-    def __openText__(self):
+    def __TextToWordsList__(self, author):
         self.word = []
-        for text in self.auteur.__getlisttext__():
-            path = "..\\bela1003-fauj3006\\TextesPourEtudiants\\" + self.auteur.__getnom__() + "\\" + text
-            file = open(path, "r", encoding="utf-8")
-            allLine = str()
-            for line in file:
-                allLine += ' ' + line.lower()
-            for c in PONC:
-                allLine = allLine.replace(c,'')
-            word1 = allLine.split(' ')
-            self.word += word1
-            file.close()
-        del word1
-        del allLine
+        for text in author.__getListText__():
+            path = "..\\bela1003-fauj3006\\TextesPourEtudiants\\" + author.__getname__() + "\\" + text
+        self.__openText__(path)
         return self.word
 
+    def __backToDic__(self, arr, bucket_count, nb):
+        cpt = 0
+        for instance in arr:
+            for key in bucket_count.keys():
+                if bucket_count.get(key) == instance:
+                    if nb == cpt:
+                        return self.Sorted
+                    cpt += 1
+                    self.Sorted[key] = instance
+                    break
+
+    def __openText__(self, path):
+        file = open(path, "r", encoding="utf-8")
+        allLine = str()
+        for line in file:
+            allLine += ' ' + line.lower()
+        for c in PONC:
+            allLine = allLine.replace(c, '')
+        word1 = allLine.split(' ')
+        self.word += word1
+        file.close()
+        del word1
+        del allLine
+
+    def __Proximite__(self,path,d1):
+        self.commonWordList = list()
+        self.word = []
+        self.__openText__(path)
+        u = UniGramme(self.word)
+        d2 = u.__createDic__()
+        commonkeys = list(set(d1.keys() & d2.keys()))
+        Result = 0
+        for keys in commonkeys:
+            NormalisedFreq = math.sqrt(math.pow((len(d1.get(keys))/len(d1.keys()))-(len(d2.get(keys))/len(d2.keys())), 2))
+            Result += NormalisedFreq
+        return Result
+
+    def __Proximite2__(self,basepath,path,authorlist):
+        resultList = []
+        for authors in authorlist:
+            a = Auteur(basepath,authors)
+            self.word = []
+            for text in a.__getListText__():
+                self.__openText__(basepath+'\\'+a.__getname__()+'\\'+ text)
+            u = UniGramme(self.word)
+            d = u.__createDic__()
+            result = self.__Proximite__(path,d)
+            resultList.append(result)
+            resultList.append(a.__getname__())
+        return resultList
 
 
-
-class Unigramme:
+class UniGramme:
     def __init__(self, word):
         self.word = word
 
-    def __createdic__(self):
+    def __createDic__(self):
         self.d = {}
         for word1 in self.word:
             if len(word1) > 2:
@@ -105,51 +177,21 @@ class Unigramme:
         else:
             self.d[bucket] = [bucket]
 
-    def __frequenceMot__(self, bucket):
-        cpt = 0
-        for b in self.d.get(bucket):
-            cpt += 1
-        return cpt
-
-    def __sortAlgorithm__(self, arr):
-        if len(arr) > 1:
-            mid = len(arr) // 2  # Finding the mid of the array
-            L = arr[:mid]  # Dividing the array elements
-            R = arr[mid:]  # into 2 halves
-
-            self.__sortAlgorithm__(L)  # Sorting the first half
-            self.__sortAlgorithm__(R)  # Sorting the second half
-
-            i = j = k = 0
-
-            # Copy data to temp arrays L[] and R[]
-            while i < self.__frequenceMot__(L) and j < self.__frequenceMot__(R):
-                if L[i] < R[j]:
-                    arr[k] = L[i]
-                    i += 1
-                else:
-                    arr[k] = R[j]
-                    j += 1
-                k += 1
-
-            # Checking if any element was left
-            while i < self.__frequenceMot__(L):
-                arr[k] = L[i]
-                i += 1
-                k += 1
-
-            while j < self.__frequenceMot__(R):
-                arr[k] = R[j]
-                j += 1
-                k += 1
+    def __BucketLength__(self, dictionary):
+        self.ListLength = {}
+        for bucket in dictionary:
+            cpt = 0
+            for b in self.d.get(bucket):
+                cpt += 1
+            self.ListLength[bucket] = cpt
+        return self.ListLength
 
 
-
-class Bigramme:
+class BiGramme:
     def __init__(self, word):
         self.word = word
 
-    def __createdic__(self):
+    def __createDic__(self):
         self.d = {}
         for word1 in self.word:
             if len(word1) > 2:
@@ -166,28 +208,30 @@ class Bigramme:
         else:
             self.d[bucket] = [bucket]
 
-    def __frequenceSeq__(self,bucket):
-        cpt = 0
-        for b in self.d.get(bucket):
-            cpt += 1
-        return cpt
+    def __BucketLength__(self, dictionary):
+        self.ListLength = {}
+        for bucket in dictionary:
+            cpt = 0
+            for b in self.d.get(bucket):
+                cpt += 1
+            self.ListLength[bucket] = cpt
+        return self.ListLength
 
 
 class Auteur:
-    nom = ""
-    listText = []
 
-    def __init__(self, Path, Nom):
-        directory = Path + '\\' + Nom
-        self.nom = Nom
+    def __init__(self, path, name):
+        self.listText = []
+        directory = path + '\\' + name
+        self.nom = name
         for entry in os.listdir(directory):
             if os.path.isfile(os.path.join(directory, entry)):
                 self.listText.append(entry)
 
-    def __getlisttext__(self):
+    def __getListText__(self):
         return self.listText
 
-    def __getnom__(self):
+    def __getname__(self):
         return self.nom
 
 
@@ -209,6 +253,7 @@ if __name__ == "__main__":
     parser.add_argument('-g', help='Nom de base du fichier de texte a generer')
     parser.add_argument('-v', action='store_true', help='Mode verbose')
     parser.add_argument('-P', action='store_true', help='Retirer la ponctuation')
+    parser.add_argument('-A', action='store_true', help='Analyse sur tout les auteur')
     args = parser.parse_args()
 
     ### Lecture du rÃ©pertoire des auteurs, obtenir la liste des auteurs
@@ -260,17 +305,34 @@ if __name__ == "__main__":
             print("    " + aut[-1])
 
 ### Ã€ partir d'ici, vous devriez inclure les appels Ã  votre code
-auteur = Auteur(args.d, args.a)
-text = Text(auteur)
-list = text.__openText__()
-if args.m == 1:
-    unig = Unigramme(list)
-    g = unig.__createdic__()
-    toBeSorted = unig.__frequenceMot__(g)
-    unig.__sortAlgorithm__(g)
+authorsList = ['Balzac', 'Hugo', 'Ségur', 'Verne', 'Voltaire', 'Zola']
+text = Text()
+if not args.A or not args.a:
+    auteur = Auteur(args.d, args.a)
+    WordsList = text.__TextToWordsList__(auteur)
+    if args.m == 1:
+        unig = UniGramme(WordsList)
+        d = unig.__createDic__()
+        if args.f:
+            print(args.a, " à une proximité de :", text.__Proximite__(args.f, d), " avec le text Emile Zola - Germinal.txt")
+    if args.m == 2:
+        big = BiGramme(WordsList)
+        d = big.__createDic__()
+    if args.F:
+        if args.m == 1:
+            toBeSorted = unig.__BucketLength__(d)
+        else:
+            toBeSorted = big.__BucketLength__(d)
+        instances = list(toBeSorted.values())
+        mergeSort(instances)
+        WordsInOrder = text.__backToDic__(instances, toBeSorted,args.F)
+        print(WordsInOrder)
 
-if args.m == 2:
-    big = Bigramme(list)
-    g = big.__createdic__()
+# -A -f ..\bela1003-fauj3006\TextesPourEtudiants\Ségur\ComtessedeSégur-FrançoisleBossu.txt
+if args.A:
+    if args.f:
+        resultList = text.__Proximite2__(args.d, args.f, authorsList)
+        for i in range(0, len(resultList), 2):
+            print(resultList[i + 1], " : ", resultList[i])
 
 print("time it took to execute all: %.2f" % (time.time() - start_time))
