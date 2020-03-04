@@ -54,8 +54,6 @@ import os
 from pathlib import Path
 from random import randint
 from random import choice
-from pythonds3 import Vertex
-from pythonds3.graphs import Graph
 import time
 
 ### Ajouter ici les signes de ponctuation Ã  retirer
@@ -67,14 +65,13 @@ PONC = ["!", '"', "'", ")", "(", ",", ".", ";", ":", "?", "-", "_", '\n']
 ###  Vous devriez inclure vos classes et mÃ©thodes ici, qui seront appellÃ©es Ã  partir du main
 class Text:
 
-    def __init__(self, Auteur):
-        self.auteur = Auteur
+    def __init__(self, auteur):
+        self.auteur = auteur
 
     def __openText__(self):
-        listText = self.auteur.__getlisttext__()
         self.word = []
-        for text in listText:
-            path = "C:\\Users\\adamb\\Documents\\APP5-S2\\bela1003-fauj3006\\TextesPourEtudiants\\" + auteur.__getnom__() + "\\" + text
+        for text in self.auteur.__getlisttext__():
+            path = "..\\bela1003-fauj3006\\TextesPourEtudiants\\" + self.auteur.__getnom__() + "\\" + text
             file = open(path, "r", encoding="utf-8")
             allLine = str()
             for line in file:
@@ -86,51 +83,94 @@ class Text:
             file.close()
         del word1
         del allLine
-        g = self.__createdic__(self.word)
-        del self.word
+        return self.word
 
-        return g
-
-    def __createdic__(self, word):
-        d = {}
-        for word1 in word:
-            if len(word1) > 2:
-                self.__addBucket__(d, word1)
-        return d
-
-    def __addBucket__(self, d, bucket):
-        if bucket in d:
-            d[bucket].append(bucket)
-        else:
-            d[bucket] = [bucket]
 
 
 
 class Unigramme:
-    listFrequenceMot = {}
-    listMot = []
+    def __init__(self, word):
+        self.word = word
 
-    def __init__(self, list_Mot):
-        self.listMot = list_Mot
+    def __createdic__(self):
+        self.d = {}
+        for word1 in self.word:
+            if len(word1) > 2:
+                self.__addBucket__(word1)
+        return self.d
 
-    def __createlist__(self):
-        return
+    def __addBucket__(self, bucket):
+        if bucket in self.d:
+            self.d[bucket].append(bucket)
+        else:
+            self.d[bucket] = [bucket]
+
+    def __frequenceMot__(self, bucket):
+        cpt = 0
+        for b in self.d.get(bucket):
+            cpt += 1
+        return cpt
+
+    def __sortAlgorithm__(self, arr):
+        if len(arr) > 1:
+            mid = len(arr) // 2  # Finding the mid of the array
+            L = arr[:mid]  # Dividing the array elements
+            R = arr[mid:]  # into 2 halves
+
+            self.__sortAlgorithm__(L)  # Sorting the first half
+            self.__sortAlgorithm__(R)  # Sorting the second half
+
+            i = j = k = 0
+
+            # Copy data to temp arrays L[] and R[]
+            while i < self.__frequenceMot__(L) and j < self.__frequenceMot__(R):
+                if L[i] < R[j]:
+                    arr[k] = L[i]
+                    i += 1
+                else:
+                    arr[k] = R[j]
+                    j += 1
+                k += 1
+
+            # Checking if any element was left
+            while i < self.__frequenceMot__(L):
+                arr[k] = L[i]
+                i += 1
+                k += 1
+
+            while j < self.__frequenceMot__(R):
+                arr[k] = R[j]
+                j += 1
+                k += 1
+
 
 
 class Bigramme:
-    listFrequenceMot = {}
-    listMot = []
+    def __init__(self, word):
+        self.word = word
 
-    def __init__(self, list_Mot):
-        self.listMot = list_Mot
+    def __createdic__(self):
+        self.d = {}
+        for word1 in self.word:
+            if len(word1) > 2:
+                if self.lastWord != '':
+                    self.__addBucket__(word1, self.lastWord)
+            self.lastWord = word1
+        return self.d
 
-    def __createlist__(self):
-        for i in range(len(self.listMot) - 1):
-            word = self.listMot[i] + ' ' + self.listMot[i + 1]
-            if not self.listFrequenceMot.get(word):
-                self.listFrequenceMot[word] = word
-            else:
-                self.listFrequenceMot[word] += ' ' + word
+    def __addBucket__(self, word1, word2):
+        bucket = str()
+        bucket = word1 + ' ' + word2
+        if bucket in self.d:
+            self.d[bucket].append(bucket)
+        else:
+            self.d[bucket] = [bucket]
+
+    def __frequenceSeq__(self,bucket):
+        cpt = 0
+        for b in self.d.get(bucket):
+            cpt += 1
+        return cpt
 
 
 class Auteur:
@@ -162,7 +202,7 @@ if __name__ == "__main__":
     parser.add_argument('-d', required=True, help='Repertoire contenant les sous-repertoires des auteurs')
     parser.add_argument('-a', help='Auteur a traiter')
     parser.add_argument('-f', help='Fichier inconnu a comparer')
-    parser.add_argument('-m', required=True, type=int, choices=range(1, 2),
+    parser.add_argument('-m', required=True, type=int, choices=range(1, 3),
                         help='Mode (1 ou 2) - unigrammes ou digrammes')
     parser.add_argument('-F', type=int, help='Indication du rang (en frequence) du mot (ou bigramme) a imprimer')
     parser.add_argument('-G', type=int, help='Taille du texte a generer')
@@ -222,9 +262,15 @@ if __name__ == "__main__":
 ### Ã€ partir d'ici, vous devriez inclure les appels Ã  votre code
 auteur = Auteur(args.d, args.a)
 text = Text(auteur)
-dic = text.__openText__()
-# unig = Unigramme(list)
-# unig.__createlist__()
-# big = Bigramme(list)
-# big.__createlist__()
+list = text.__openText__()
+if args.m == 1:
+    unig = Unigramme(list)
+    g = unig.__createdic__()
+    toBeSorted = unig.__frequenceMot__(g)
+    unig.__sortAlgorithm__(g)
+
+if args.m == 2:
+    big = Bigramme(list)
+    g = big.__createdic__()
+
 print("time it took to execute all: %.2f" % (time.time() - start_time))
