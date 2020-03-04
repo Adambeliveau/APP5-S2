@@ -54,48 +54,83 @@ import os
 from pathlib import Path
 from random import randint
 from random import choice
+from pythonds3 import Vertex
+from pythonds3.graphs import Graph
+import time
 
 ### Ajouter ici les signes de ponctuation Ã  retirer
-PONC = ["!", '"', "'", ")", "(", ",", ".", ";", ":", "?", "-", "_"]
+from typing import List, Any, Union
+
+PONC = ["!", '"', "'", ")", "(", ",", ".", ";", ":", "?", "-", "_", '\n']
 
 
 ###  Vous devriez inclure vos classes et mÃ©thodes ici, qui seront appellÃ©es Ã  partir du main
 class Text:
-    listMot = []
 
     def __init__(self, Auteur):
         self.auteur = Auteur
 
     def __openText__(self):
         listText = self.auteur.__getlisttext__()
+        self.word = []
         for text in listText:
-            path = "C:\\Users\\adamb\\Documents\\APP5-S2\\bela1003-fauj3006\\TextesPourEtudiants\\"+auteur.__getnom__()+ "\\"+text
-            file = open(path, "r")
+            path = "C:\\Users\\adamb\\Documents\\APP5-S2\\bela1003-fauj3006\\TextesPourEtudiants\\" + auteur.__getnom__() + "\\" + text
+            file = open(path, "r", encoding="utf-8")
+            allLine = str()
             for line in file:
+                allLine += ' ' + line.lower()
+            for c in PONC:
+                allLine = allLine.replace(c,'')
+            word1 = allLine.split(' ')
+            self.word += word1
+            file.close()
+        del word1
+        del allLine
+        g = self.__createdic__(self.word)
+        del self.word
 
-                for caract in line:
-                    if caract.isupper():
-                        caract.lower()
-                    if (ascii(57) < caract < ascii(48)) or (ascii(122) < caract < ascii(97)):
-                        caract = ' '
+        return g
 
-            word = line.split(' ')
-            for word1 in word:
-                alreadyIn = False
-                for word2 in self.listMot:
-                    if word2 == word1:
-                        alreadyIn = True
-                if not alreadyIn:
-                    self.listMot.append(word1)
-            print(*self.listMot)
+    def __createdic__(self, word):
+        d = {}
+        for word1 in word:
+            if len(word1) > 2:
+                self.__addBucket__(d, word1)
+        return d
+
+    def __addBucket__(self, d, bucket):
+        if bucket in d:
+            d[bucket].append(bucket)
+        else:
+            d[bucket] = [bucket]
+
 
 
 class Unigramme:
     listFrequenceMot = {}
+    listMot = []
+
+    def __init__(self, list_Mot):
+        self.listMot = list_Mot
+
+    def __createlist__(self):
+        return
 
 
 class Bigramme:
-    listFrequenceSequence = {}
+    listFrequenceMot = {}
+    listMot = []
+
+    def __init__(self, list_Mot):
+        self.listMot = list_Mot
+
+    def __createlist__(self):
+        for i in range(len(self.listMot) - 1):
+            word = self.listMot[i] + ' ' + self.listMot[i + 1]
+            if not self.listFrequenceMot.get(word):
+                self.listFrequenceMot[word] = word
+            else:
+                self.listFrequenceMot[word] += ' ' + word
 
 
 class Auteur:
@@ -107,8 +142,7 @@ class Auteur:
         self.nom = Nom
         for entry in os.listdir(directory):
             if os.path.isfile(os.path.join(directory, entry)):
-                if entry != '.DS_Store':
-                    self.listText.append(entry)
+                self.listText.append(entry)
 
     def __getlisttext__(self):
         return self.listText
@@ -123,6 +157,7 @@ class Auteur:
 ###             Certains paramÃ¨tres sont obligatoires ("required=True")
 ###             Ces paramÃ¨tres doivent Ãªtres fournis Ã  python lorsque l'application est exÃ©cutÃ©e
 if __name__ == "__main__":
+    start_time = time.time()
     parser = argparse.ArgumentParser(prog='markov_bela1003-fauj3006.py')
     parser.add_argument('-d', required=True, help='Repertoire contenant les sous-repertoires des auteurs')
     parser.add_argument('-a', help='Auteur a traiter')
@@ -187,4 +222,9 @@ if __name__ == "__main__":
 ### Ã€ partir d'ici, vous devriez inclure les appels Ã  votre code
 auteur = Auteur(args.d, args.a)
 text = Text(auteur)
-text.__openText__()
+dic = text.__openText__()
+# unig = Unigramme(list)
+# unig.__createlist__()
+# big = Bigramme(list)
+# big.__createlist__()
+print("time it took to execute all: %.2f" % (time.time() - start_time))
