@@ -60,7 +60,7 @@ from operator import itemgetter
 ### Ajouter ici les signes de ponctuation Ã  retirer
 from typing import List, Any, Union
 
-PONC = ["!", '"', "'", ")", "(", ",", ".", ";", ":", "?", "-", "_", "*", '\n']
+PONC = ["!", '"', "'", ")", "(", ",", ".", ";", ":", "?", "-", "_", "*", "[", "]"]
 
 
 ###  Vous devriez inclure vos classes et mÃ©thodes ici, qui seront appellÃ©es Ã  partir du main
@@ -99,7 +99,6 @@ def mergeSort(arr):
 
 class Text:
     def __init__(self, path, name):
-        self.Sorted = dict()
         self.listText = []
         directory = path + '\\' + name
         self.name = name
@@ -107,41 +106,47 @@ class Text:
             if os.path.isfile(os.path.join(directory, entry)):
                 self.listText.append(entry)
 
-    def __TextToWordsList__(self):
+    def __TextToWordsList__(self, punc):
         self.word = []
         for text in self.listText:
             path = "..\\bela1003-fauj3006\\TextesPourEtudiants\\" + self.name + "\\" + text
-        self.__openText__(path)
+            self.__openText__(path, punc)
         return self.word
 
     def __backToDic__(self, arr, bucket_count, nb):
         cpt = 0
+        Sorted = dict()
         for instance in arr:
+            alreadyfound = False
             for key in bucket_count.keys():
                 if bucket_count.get(key) == instance:
                     if nb == cpt:
-                        return self.Sorted
-                    cpt += 1
-                    self.Sorted[key] = instance
-                    break
+                        return Sorted
+                    if not alreadyfound:
+                        if not Sorted.get(key):
+                            cpt += 1
+                            alreadyfound = True
+                            Sorted[key] = instance
 
-    def __openText__(self, path):
+    def __openText__(self, path, punc):
         file = open(path, "r", encoding="utf-8")
         allLine = str()
         for line in file:
             allLine += ' ' + line.lower()
-        for c in PONC:
-            allLine = allLine.replace(c, '')
+        if not punc:
+            for c in PONC:
+                allLine = allLine.replace(c, '')
+            allLine = allLine.replace('\n', '')
         word1 = allLine.split(' ')
         self.word += word1
         file.close()
         del word1
         del allLine
 
-    def __Proximite__(self,path,d1):
+    def __Proximite__(self, path, d1, punc):
         self.commonWordList = list()
         self.word = []
-        self.__openText__(path)
+        self.__openText__(path, punc)
         u = UniGramme(self.word)
         d2 = u.__createDic__()
         commonkeys = list(set(d1.keys() & d2.keys()))
@@ -151,19 +156,33 @@ class Text:
             Result += NormalisedFreq
         return Result
 
-    def __Proximite2__(self,basepath,path,authorlist):
+    def __Proximite2__(self, basepath, path, authorlist, punc):
         resultList = []
-        for authors in authorlist:
-            a = Auteur(basepath,authors)
+        for i in authorlist:
             self.word = []
-            for text in a.__getListText__():
-                self.__openText__(basepath+'\\'+a.__getname__()+'\\'+ text)
+            for text in self.listText:
+                self.__openText__(basepath+'\\'+ self.name +'\\'+ text, punc)
             u = UniGramme(self.word)
             d = u.__createDic__()
-            result = self.__Proximite__(path,d)
+            result = self.__Proximite__(path, d, punc)
             resultList.append(result)
-            resultList.append(a.__getname__())
+            resultList.append(self.name)
         return resultList
+
+    def __Generation__(self, output, bucket_count, nb_word):
+        self.listForGeneration = list()
+        for word in bucket_count.keys():
+            for i in range(bucket_count[word]):
+                self.listForGeneration.append(word)
+        file = open(output, "a")
+        file.write(self.name + " ::Debut\n")
+        for i in range(nb_word):
+            index = randint(0, len(self.listForGeneration))
+            file.write(self.listForGeneration[index] + " ")
+            if i % 15 == 0:
+                file.write('\n')
+        file.write("\n" + self.name + " ::Fin")
+        file.close()
 
 
 class UniGramme:
@@ -173,7 +192,7 @@ class UniGramme:
     def __createDic__(self):
         self.d = {}
         for word1 in self.word:
-            if len(word1) > 2:
+            if len(word1) > 2 or (PONC.count(word1) and len(word1) == 1):
                 self.__addBucket__(word1)
         return self.d
 
@@ -200,9 +219,10 @@ class BiGramme:
     def __createDic__(self):
         self.d = {}
         for word1 in self.word:
-            if len(word1) > 2:
+            if len(word1) > 2 or (PONC.count(word1) and len(word1) == 1):
                 if self.lastWord != '':
-                    self.__addBucket__(word1, self.lastWord)
+                    if len(self.lastWord) > 2:
+                        self.__addBucket__(self.lastWord, word1)
             self.lastWord = word1
         return self.d
 
@@ -224,22 +244,6 @@ class BiGramme:
         return self.ListLength
 
 
-class Auteur:
-
-    def __init__(self, path, name):
-        self.listText = []
-        directory = path + '\\' + name
-        self.nom = name
-        for entry in os.listdir(directory):
-            if os.path.isfile(os.path.join(directory, entry)):
-                self.listText.append(entry)
-
-    def __getListText__(self):
-        return self.listText
-
-    def __getname__(self):
-        return self.nom
-
 class Test:
     def __init__(self, author, allauthor, directory, punctuation, mode, generation, output, path, rank):
         self.author = author
@@ -252,16 +256,17 @@ class Test:
         self.path = path
         self. rank = rank
 
-    def __testytest__(self):
+    def __testyTest__(self):
         authorsList = ['Balzac', 'Hugo', 'Ségur', 'Verne', 'Voltaire', 'Zola']
-        text = Text(self.directory,self.author)
-        if not self.allauthor or not self.author:
-            WordsList = text.__TextToWordsList__()
+
+        if not self.allauthor and not self.author:
+            text = Text(self.directory, self.author)
+            WordsList = text.__TextToWordsList__(self.punctuation)
             if self.mode == 1:
                 unig = UniGramme(WordsList)
                 d = unig.__createDic__()
                 if self.path:
-                    print(self.author, " à une proximité de :", text.__Proximite__(self.path, d),
+                    print(self.author, " à une proximité de :", text.__Proximite__(self.path, d, self.punctuation),
                           " avec le text Emile Zola - Germinal.txt")
             if self.mode == 2:
                 big = BiGramme(WordsList)
@@ -275,15 +280,47 @@ class Test:
                 mergeSort(instances)
                 WordsInOrder = text.__backToDic__(instances, toBeSorted, self.rank)
                 for w in WordsInOrder:
-                    print(w)
-
+                    print(w, " : ", WordsInOrder[w])
+            if self.generation:
+                text.__Generation__(self.output, toBeSorted, self.generation)
 
         # -A -f ..\bela1003-fauj3006\TextesPourEtudiants\Ségur\ComtessedeSégur-FrançoisleBossu.txt
         if self.allauthor:
             if self.path:
-                resultList = text.__Proximite2__(self.directory, self.path, authorsList)
+                resultList = text.__Proximite2__(self.directory, self.path, authorsList, self.punctuation)
                 for i in range(0, len(resultList), 2):
                     print(resultList[i + 1], " : ", resultList[i])
+        for authors in authorsList:
+            text = Text(self.directory, authors)
+            WordsList = text.__TextToWordsList__(self.punctuation)
+            if self.mode == 1:
+                unig = UniGramme(WordsList)
+                d = unig.__createDic__()
+                toBeSorted = unig.__BucketLength__(d)
+            if self.mode == 2:
+                big = BiGramme(WordsList)
+                d = big.__createDic__()
+                toBeSorted = big.__BucketLength__(d)
+            if self.generation:
+                file = open(self.output, 'w')
+                file.write("***************************************************************************\n")
+                file.close()
+                text.__Generation__(self.output, toBeSorted, self.generation)
+                file = open(self.output, 'a')
+                file.write('\n\n***************************************************************************\n\n')
+                file.close()
+            if self.rank:
+                if args.m == 1:
+                    toBeSorted = unig.__BucketLength__(d)
+                else:
+                    toBeSorted = big.__BucketLength__(d)
+                instances = list(toBeSorted.values())
+                mergeSort(instances)
+                WordsInOrder = text.__backToDic__(instances, toBeSorted, self.rank)
+                print(authors + ': \n')
+                for w in WordsInOrder:
+                    print(w, " : ", WordsInOrder[w])
+                print('\n')
 
 
 ### Main: lecture des paramÃ¨tres et appel des mÃ©thodes appropriÃ©es
@@ -357,7 +394,7 @@ if __name__ == "__main__":
 
 ### Ã€ partir d'ici, vous devriez inclure les appels Ã  votre code
 t = Test(args.a, args.A, args.d, args.P, args.m, args.G, args.g, args.f, args.F)
-t.__testytest__()
+t.__testyTest__()
 
 
 print("time it took to execute all: %.2f" % (time.time() - start_time))
