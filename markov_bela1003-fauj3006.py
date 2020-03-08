@@ -98,13 +98,19 @@ def mergeSort(arr):
 
 
 class Text:
-    def __init__(self):
+    def __init__(self, path, name):
         self.Sorted = dict()
+        self.listText = []
+        directory = path + '\\' + name
+        self.name = name
+        for entry in os.listdir(directory):
+            if os.path.isfile(os.path.join(directory, entry)):
+                self.listText.append(entry)
 
-    def __TextToWordsList__(self, author):
+    def __TextToWordsList__(self):
         self.word = []
-        for text in author.__getListText__():
-            path = "..\\bela1003-fauj3006\\TextesPourEtudiants\\" + author.__getname__() + "\\" + text
+        for text in self.listText:
+            path = "..\\bela1003-fauj3006\\TextesPourEtudiants\\" + self.name + "\\" + text
         self.__openText__(path)
         return self.word
 
@@ -234,6 +240,51 @@ class Auteur:
     def __getname__(self):
         return self.nom
 
+class Test:
+    def __init__(self, author, allauthor, directory, punctuation, mode, generation, output, path, rank):
+        self.author = author
+        self.allauthor = allauthor
+        self.directory = directory
+        self.punctuation = punctuation
+        self.mode = mode
+        self.generation = generation
+        self.output = output
+        self.path = path
+        self. rank = rank
+
+    def __testytest__(self):
+        authorsList = ['Balzac', 'Hugo', 'Ségur', 'Verne', 'Voltaire', 'Zola']
+        text = Text(self.directory,self.author)
+        if not self.allauthor or not self.author:
+            WordsList = text.__TextToWordsList__()
+            if self.mode == 1:
+                unig = UniGramme(WordsList)
+                d = unig.__createDic__()
+                if self.path:
+                    print(self.author, " à une proximité de :", text.__Proximite__(self.path, d),
+                          " avec le text Emile Zola - Germinal.txt")
+            if self.mode == 2:
+                big = BiGramme(WordsList)
+                d = big.__createDic__()
+            if self.rank:
+                if args.m == 1:
+                    toBeSorted = unig.__BucketLength__(d)
+                else:
+                    toBeSorted = big.__BucketLength__(d)
+                instances = list(toBeSorted.values())
+                mergeSort(instances)
+                WordsInOrder = text.__backToDic__(instances, toBeSorted, self.rank)
+                for w in WordsInOrder:
+                    print(w)
+
+
+        # -A -f ..\bela1003-fauj3006\TextesPourEtudiants\Ségur\ComtessedeSégur-FrançoisleBossu.txt
+        if self.allauthor:
+            if self.path:
+                resultList = text.__Proximite2__(self.directory, self.path, authorsList)
+                for i in range(0, len(resultList), 2):
+                    print(resultList[i + 1], " : ", resultList[i])
+
 
 ### Main: lecture des paramÃ¨tres et appel des mÃ©thodes appropriÃ©es
 ###
@@ -305,34 +356,8 @@ if __name__ == "__main__":
             print("    " + aut[-1])
 
 ### Ã€ partir d'ici, vous devriez inclure les appels Ã  votre code
-authorsList = ['Balzac', 'Hugo', 'Ségur', 'Verne', 'Voltaire', 'Zola']
-text = Text()
-if not args.A or not args.a:
-    auteur = Auteur(args.d, args.a)
-    WordsList = text.__TextToWordsList__(auteur)
-    if args.m == 1:
-        unig = UniGramme(WordsList)
-        d = unig.__createDic__()
-        if args.f:
-            print(args.a, " à une proximité de :", text.__Proximite__(args.f, d), " avec le text Emile Zola - Germinal.txt")
-    if args.m == 2:
-        big = BiGramme(WordsList)
-        d = big.__createDic__()
-    if args.F:
-        if args.m == 1:
-            toBeSorted = unig.__BucketLength__(d)
-        else:
-            toBeSorted = big.__BucketLength__(d)
-        instances = list(toBeSorted.values())
-        mergeSort(instances)
-        WordsInOrder = text.__backToDic__(instances, toBeSorted,args.F)
-        print(WordsInOrder)
+t = Test(args.a, args.A, args.d, args.P, args.m, args.G, args.g, args.f, args.F)
+t.__testytest__()
 
-# -A -f ..\bela1003-fauj3006\TextesPourEtudiants\Ségur\ComtessedeSégur-FrançoisleBossu.txt
-if args.A:
-    if args.f:
-        resultList = text.__Proximite2__(args.d, args.f, authorsList)
-        for i in range(0, len(resultList), 2):
-            print(resultList[i + 1], " : ", resultList[i])
 
 print("time it took to execute all: %.2f" % (time.time() - start_time))
