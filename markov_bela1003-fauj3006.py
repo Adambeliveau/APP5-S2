@@ -130,9 +130,7 @@ class Text:
 
     def __openText__(self, path, punc):
         file = open(path, "r", encoding="utf-8")
-        allLine = str()
-        for line in file:
-            allLine += ' ' + line.lower()
+        allLine = file.read().lower()
         if not punc:
             for c in PONC:
                 allLine = allLine.replace(c, '')
@@ -152,21 +150,22 @@ class Text:
         commonkeys = list(set(d1.keys() & d2.keys()))
         Result = 0
         for keys in commonkeys:
-            NormalisedFreq = math.sqrt(math.pow((len(d1.get(keys))/len(d1.keys()))-(len(d2.get(keys))/len(d2.keys())), 2))
+            NormalisedFreq = math.pow((len(d1.get(keys)) / len(commonkeys)) - (len(d2.get(keys)) / len(commonkeys)), 2)
             Result += NormalisedFreq
+        math.sqrt(Result)
         return Result
 
-    def __Proximite2__(self, basepath, path, authorlist, punc):
+    def __Proximite2__(self, basepath, path, punc):
         resultList = []
-        for i in authorlist:
+        result = 0
+        for text in self.listText:
             self.word = []
-            for text in self.listText:
-                self.__openText__(basepath+'\\'+ self.name +'\\'+ text, punc)
+            self.__openText__(basepath + '\\' + self.name + '\\' + text, punc)
             u = UniGramme(self.word)
             d = u.__createDic__()
-            result = self.__Proximite__(path, d, punc)
-            resultList.append(result)
-            resultList.append(self.name)
+            result += self.__Proximite__(path, d, punc)
+        resultList.append(result/len(self.listText))
+        resultList.append(self.name)
         return resultList
 
     def __Generation__(self, output, bucket_count, nb_word):
@@ -215,6 +214,7 @@ class UniGramme:
 class BiGramme:
     def __init__(self, word):
         self.word = word
+        self.lastWord = ''
 
     def __createDic__(self):
         self.d = {}
@@ -254,7 +254,7 @@ class Test:
         self.generation = generation
         self.output = output
         self.path = path
-        self. rank = rank
+        self.rank = rank
 
     def __testyTest__(self):
         authorsList = ['Balzac', 'Hugo', 'Ségur', 'Verne', 'Voltaire', 'Zola']
@@ -285,14 +285,14 @@ class Test:
                 text.__Generation__(self.output, toBeSorted, self.generation)
 
         # -A -f ..\bela1003-fauj3006\TextesPourEtudiants\Ségur\ComtessedeSégur-FrançoisleBossu.txt
-        if self.allauthor:
-            if self.path:
-                resultList = text.__Proximite2__(self.directory, self.path, authorsList, self.punctuation)
-                for i in range(0, len(resultList), 2):
-                    print(resultList[i + 1], " : ", resultList[i])
         for authors in authorsList:
             text = Text(self.directory, authors)
             WordsList = text.__TextToWordsList__(self.punctuation)
+            if self.allauthor:
+                if self.path:
+                    resultList = text.__Proximite2__(self.directory, self.path, self.punctuation)
+                    for i in range(0, len(resultList), 2):
+                        print(resultList[i + 1], " : ", resultList[i])
             if self.mode == 1:
                 unig = UniGramme(WordsList)
                 d = unig.__createDic__()
@@ -367,7 +367,7 @@ if __name__ == "__main__":
         print("Mode verbose:")
         print("Calcul avec les auteurs du repertoire: " + args.d)
         if args.f:
-            print("Fichier inconnu a,"
+            print("Fichier inconnu a"
                   " etudier: " + args.f)
 
         print("Calcul avec des " + str(args.m) + "-grammes")
@@ -395,6 +395,5 @@ if __name__ == "__main__":
 ### Ã€ partir d'ici, vous devriez inclure les appels Ã  votre code
 t = Test(args.a, args.A, args.d, args.P, args.m, args.G, args.g, args.f, args.F)
 t.__testyTest__()
-
 
 print("time it took to execute all: %.2f" % (time.time() - start_time))
