@@ -56,7 +56,6 @@ from random import randint
 from random import choice
 import time
 
-
 ### Ajouter ici les signes de ponctuation Ã  retirer
 from typing import List, Any, Union
 
@@ -95,6 +94,7 @@ class Text:
         self.listText = []
         directory = path + '\\' + name
         self.name = name
+        self.nbpunc = 0
         for entry in os.listdir(directory):
             if os.path.isfile(os.path.join(directory, entry)):
                 self.listText.append(entry)
@@ -120,11 +120,12 @@ class Text:
                             cpt += 1
                             alreadyfound = True
                             Sorted[key] = instance
+                            break
 
     def __openText__(self, path, punc):
         file = open(path, "r", encoding="utf-8")
         allLine = file.read().lower()
-        punctuation = list()
+        self.punctuation = list()
         allLine = allLine.replace('\n', ' ')
         if not punc:
             for c in PONC:
@@ -133,12 +134,12 @@ class Text:
             for caract in allLine:
                 for c in PONC:
                     if c == caract:
-                        punctuation.append(caract)
+                        self.punctuation.append(caract)
             for c in PONC:
                 allLine = allLine.replace(c, ' ')
-            self.word += punctuation
         word1 = allLine.split(' ')
         self.word += word1
+        self.nbpunc = len(self.punctuation)/(len(self.word + self.punctuation))*100
         file.close()
         del word1
         del allLine
@@ -166,17 +167,17 @@ class Text:
             u = UniGramme(self.word)
             d = u.__createDic__()
             result += self.__Proximite__(path, d, punc)
-        resultList.append(result/len(self.listText))
+        resultList.append(result / len(self.listText))
         resultList.append(self.name)
         return resultList
 
-    def __Generation__(self, output, dictionairy, nb_word, mode):
+    def __Generation__(self, output, dictionary, nb_word, mode):
         file = open(output, "a", encoding="utf-8")
         file.write(self.name + " ::Debut\n")
         if mode == 1:
             self.listForGeneration = list()
-            for word in dictionairy.keys():
-                for i in range(dictionairy[word]):
+            for word in dictionary.keys():
+                for i in range(dictionary[word]):
                     self.listForGeneration.append(word)
             for i in range(1, nb_word + 1):
                 index = randint(0, len(self.listForGeneration) - 1)
@@ -184,21 +185,22 @@ class Text:
                 if i % 15 == 0 and not i == 0:
                     file.write('\n')
         else:
-            currentword = choice(list(dictionairy))
+            currentword = choice(list(dictionary))
             file.write(currentword + ' ')
-            listtemp = dictionairy[currentword]
+            listtemp = dictionary[currentword]
             indexfornextword = randint(0, len(listtemp) - 1)
             nextword = listtemp[indexfornextword]
             for i in range(1, nb_word + 1):
+                ifPunc = randint(0, round(self.nbpunc) - 1)
+                if ifPunc == 1:
+                    puncindex = randint(0, len(self.punctuation) - 1)
+                    file.write(self.punctuation[puncindex] + ' ')
+                    continue
                 currentword = nextword
                 file.write(currentword + ' ')
-                if dictionairy.get(currentword):
-                    listtemp = dictionairy[currentword]
-                    indexfornextword = randint(0, len(listtemp) - 1)
-                    nextword = listtemp[indexfornextword]
-                else:
-                    nextword = choice(list(dictionairy))
-
+                listtemp = dictionary[currentword]
+                indexfornextword = randint(0, len(listtemp) - 1)
+                nextword = listtemp[indexfornextword]
                 if i % 15 == 0 and not i == 0:
                     file.write('\n')
         file.write("\n" + self.name + " ::Fin")
@@ -240,14 +242,15 @@ class BiGramme:
     def __createDic__(self, modification):
         self.d = {}
         for word1 in self.word:
-            if len(word1) > 2 or (PONC.count(word1) and len(word1) == 1):
-                if self.lastWord != '':
-                    if len(self.lastWord) > 2:
-                        if modification:
-                            self.__addBucket__(self.lastWord, word1)
-                        if not modification:
-                            self.__addBucket2__(self.lastWord, word1)
-            self.lastWord = word1
+            if not word1 in PONC:
+                if len(word1) > 2:
+                    if not self.lastWord is None :
+                        if len(self.lastWord) > 2 or not self.lastWord:
+                            if modification and self.lastWord:
+                                self.__addBucket__(self.lastWord, word1)
+                            if not modification and self.lastWord:
+                                self.__addBucket2__(self.lastWord, word1)
+                            self.lastWord = word1
         return self.d
 
     def __addBucket__(self, bucket, word2):
@@ -289,7 +292,7 @@ class Test:
     def __testyTest__(self):
         authorsList = ['Balzac', 'Hugo', 'Ségur', 'Verne', 'Voltaire', 'Zola']
 
-        if not self.allauthor or not self.author:
+        if self.author:
             text = Text(self.directory, self.author)
             WordsList = text.__TextToWordsList__(self.punctuation)
 
@@ -313,6 +316,8 @@ class Test:
                 WordsInOrder = text.__backToDic__(instances, toBeSorted, self.rank)
                 for w in WordsInOrder:
                     print(w, " : ", WordsInOrder[w])
+
+            WordsList = text.__TextToWordsList__(self.punctuation)
             if self.generation:
                 file = open(self.output, 'w')
                 file.write("***************************************************************************\n")
