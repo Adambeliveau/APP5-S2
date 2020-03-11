@@ -1,50 +1,3 @@
-###
-###  Gabarit pour l'application de traitement des frequences de mots dans les oeuvres d'auteurs divers
-###  Le traitement des arguments a ete inclus:
-###     Tous les arguments requis sont presents et accessibles dans args
-###     Le traitement du mode verbose vous donne un exemple de l'utilisation des arguments
-###
-###  Frederic Mailhot, 26 fevrier 2018
-###    Revise 16 avril 2018
-###    Revise 7 janvier 2020
-
-###  Parametres utilises, leur fonction et code a generer
-###
-###  -d   Deja traite dans le gabarit:  la variable rep_auth contiendra le chemin complet vers le repertoire d'auteurs
-###       La liste d'auteurs est extraite de ce repertoire, et est comprise dans la variable authors
-###
-###  -P   Si utilise, indique au systeme d'utiliser la ponctuation.  Ce qui est considÃ©re comme un signe de ponctuation
-###       est defini dans la liste PONC
-###       Si -P EST utilise, cela indique qu'on dÃ©sire conserver la ponctuation (chaque signe est alors considere
-###       comme un mot.  Par defaut, la ponctuation devrait etre retiree
-###
-###  -m   mode d'analyse:  -m 1 indique de faire les calculs avec des unigrammes, -m 2 avec des bigrammes.
-###
-###  -a   Auteur (unique a traiter).  Utile en combinaison avec -g, -G, pour la generation d'un texte aleatoire
-###       avec les caracteristiques de l'auteur indique
-###
-###  -G   Indique qu'on veut generer un texte (voir -a ci-haut), le nombre de mots Ã  generer doit Ãªtre indique
-###
-###  -g   Indique qu'on veut generer un texte (voir -a ci-haut), le nom du fichier en sortie est indique
-###
-###  -F   Indique qu'on desire connaitre le rang d'un certain mot pour un certain auteur.  L'auteur doit etre
-###       donnÃ© avec le parametre -a, et un mot doit suivre -F:   par exemple:   -a Verne -F Cyrus
-###
-###  -v   Deja traite dans le gabarit:  mode "verbose",  va imprimer les valeurs donnÃ©es en parametre
-###
-###
-###  Le systeme doit toujours traiter l'ensemble des oeuvres de l'ensemble des auteurs.  Selon la presence et la valeur
-###  des autres parametres, le systeme produira differentes sorties:
-###
-###  avec -a, -g, -G:  generation d'un texte aleatoire avec les caracteristiques de l'auteur identifie
-###  avec -a, -F:  imprimer la frequence d'un mot d'un certain auteur.  Format de sortie:  "auteur:  mot  frequence"
-###                la frequence doit Ãªtre un nombre reel entre 0 et 1, qui represente la probabilite de ce mot
-###                pour cet auteur
-###  avec -f:  indiquer l'auteur le plus probable du texte identifie par le nom de fichier qui suit -f
-###            Format de sortie:  "nom du fichier: auteur"
-###  avec ou sans -P:  indique que les calculs doivent etre faits avec ou sans ponctuation
-###  avec -v:  mode verbose, imprimera l'ensemble des valeurs des paramÃ¨tres (fait deja partie du gabarit)
-
 
 import math
 import argparse
@@ -99,10 +52,10 @@ class Text:
             if os.path.isfile(os.path.join(directory, entry)):
                 self.listText.append(entry)
 
-    def __TextToWordsList__(self, punc):
+    def __TextToWordsList__(self, punc,rootdirectory):
         self.word = []
         for text in self.listText:
-            path = "..\\bela1003-fauj3006\\TextesPourEtudiants\\" + self.name + "\\" + text
+            path = rootdirectory + "\\" + self.name + "\\" + text
             self.__openText__(path, punc)
         return self.word
 
@@ -152,10 +105,13 @@ class Text:
         d2 = u.__createDic__()
         commonkeys = list(set(d1.keys() & d2.keys()))
         Result = 0
+        count = 0
         for keys in commonkeys:
-            NormalisedFreq = math.pow((len(d1.get(keys)) / len(d1.keys())) - (len(d2.get(keys)) / len(d2.keys())), 2)
+            count += len(d1.get(keys)) + len(d2.get(keys))
+        for keys in commonkeys:
+            NormalisedFreq = math.pow((len(d1.get(keys)) / count) - (len(d2.get(keys)) / count), 2)
             Result += NormalisedFreq
-        math.sqrt(Result)
+        Result = math.sqrt(Result)
         return Result
 
     def __Proximite2__(self, basepath, path, punc):
@@ -242,15 +198,13 @@ class BiGramme:
     def __createDic__(self, modification):
         self.d = {}
         for word1 in self.word:
-            if not word1 in PONC:
-                if len(word1) > 2:
-                    if not self.lastWord is None :
-                        if len(self.lastWord) > 2 or not self.lastWord:
-                            if modification and self.lastWord:
-                                self.__addBucket__(self.lastWord, word1)
-                            if not modification and self.lastWord:
-                                self.__addBucket2__(self.lastWord, word1)
-                            self.lastWord = word1
+            if not word1 in PONC and len(word1) > 2:
+                    if len(self.lastWord) > 2 or not self.lastWord:
+                        if modification and self.lastWord:
+                            self.__addBucket__(self.lastWord, word1)
+                        if not modification and self.lastWord:
+                            self.__addBucket2__(self.lastWord, word1)
+                        self.lastWord = word1
         return self.d
 
     def __addBucket__(self, bucket, word2):
@@ -294,7 +248,7 @@ class Test:
 
         if self.author:
             text = Text(self.directory, self.author)
-            WordsList = text.__TextToWordsList__(self.punctuation)
+            WordsList = text.__TextToWordsList__(self.punctuation,args.d)
 
             if self.path:
                 unig = UniGramme(WordsList)
@@ -317,7 +271,7 @@ class Test:
                 for w in WordsInOrder:
                     print(w, " : ", WordsInOrder[w])
 
-            WordsList = text.__TextToWordsList__(self.punctuation)
+            WordsList = text.__TextToWordsList__(self.punctuation,args.d)
             if self.generation:
                 file = open(self.output, 'w')
                 file.write("***************************************************************************\n")
@@ -339,12 +293,12 @@ class Test:
         if self.allauthor:
             for authors in authorsList:
                 text = Text(self.directory, authors)
-                WordsList = text.__TextToWordsList__(self.punctuation)
+                WordsList = text.__TextToWordsList__(self.punctuation,args.d)
 
                 if self.path:
                     resultList = text.__Proximite2__(self.directory, self.path, self.punctuation)
                     for i in range(0, len(resultList), 2):
-                        print(resultList[i + 1], " : ", resultList[i])
+                        print(resultList[i + 1], " : ", "%.4f" % resultList[i])
                 if self.generation:
                     file = open(self.output, 'w')
                     file.write("***************************************************************************\n")
