@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="e20d9922-b907-4f00-b904-e59155bb1e0f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Balzac/Honoré de Balzac - La comédie humaine - Volume 1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Balzac/Honoré de Balzac - La comédie humaine - Volume 2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Balzac/Honoré de Balzac - La comédie humaine - Volume 3.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Balzac/Honoré de Balzac - La comédie humaine - Volume 4.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Balzac/Honoré de Balzac - La comédie humaine - Volume 9.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Hugo/Victor Hugo - L'homme qui rit.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Hugo/Victor Hugo - Les misérables - Tome I.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Hugo/Victor Hugo - Les misérables - Tome II.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Hugo/Victor Hugo - Les misérables - Tome IV.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Hugo/Victor Hugo - Les misérables - Tome V.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Hugo/Victor Hugo - Notre-Dame de Paris.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Ségur/Comtesse de Ségur - François le Bossu.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Ségur/Comtesse de Ségur - Les deux nigauds.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Ségur/Comtesse de Ségur - Les malheurs de Sophie.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Ségur/Comtesse de Ségur - Les mémoires d'un ane.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Ségur/Comtesse de Ségur - Un bon petit diable.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Verne/Jules Verne - Autour de la lune.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Verne/Jules Verne - De la terre a la lune.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Verne/Jules Verne - L'ile mystérieuse.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Verne/Jules Verne - Le tour du monde en quatre-vingts jours.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Verne/Jules Verne - Les enfants du capitaine Grant.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Verne/Jules Verne - Robur-le-conquérant.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Verne/Jules Verne - Vingt mille lieues sous les mers.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Verne/Jules Verne - Voyage au centre de la terre.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Voltaire/Voltaire - Candide.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Voltaire/Voltaire - L'ingénu.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Voltaire/Voltaire - Zadig ou la destinée.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Zola/Emile Zola - Germinal.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Zola/Emile Zola - L'assomoir.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Zola/Emile Zola - La bête humaine.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Zola/Emile Zola - La faute de l'abbée Mouret.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../TextesPourEtudiants/Zola/Emile Zola - Nana.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../mySnake/.idea/mySnake.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/My Documents.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Snake/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Snake/CMakeLists.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Snake/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Snake/main.cpp" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectId" id="1YaBeOywYUq970llYzVHTLl2Ym4" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="bela1003-fauj3006" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\adamb\venv\bela1003-fauj3006\Scripts\python.exe" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="-d C:\Users\adamb\Documents\APP5-S2\TextesPourEtudiants" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="markov" type="PythonConfigurationType" factoryName="Python">
+      <module name="bela1003-fauj3006" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\adamb\venv\bela1003-fauj3006\Scripts\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/markov_bela1003-fauj3006.py" />
+      <option name="PARAMETERS" value="-d TextesPourEtudiants -m 1 -A -f Balzac_généré.txt" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e20d9922-b907-4f00-b904-e59155bb1e0f" name="Default Changelist" comment="" />
+      <created>1583170919544</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1583170919544</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="361" y="70" key="#Notifications" timestamp="1583365852670">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="361" y="70" key="#Notifications/0.0.1536.824@0.0.1536.824" timestamp="1583365852670" />
+    <state x="-85" y="42" width="1536" height="706" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1583891888352">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="-85" y="42" width="1536" height="706" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1583891888352" />
+    <state x="524" y="115" key="#xdebugger.evaluate" timestamp="1583286252754">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="524" y="115" key="#xdebugger.evaluate/0.0.1536.824@0.0.1536.824" timestamp="1583286252754" />
+    <state width="608" height="466" key="DebuggerActiveHint" timestamp="1583278808084">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="608" height="466" key="DebuggerActiveHint/0.0.1536.824@0.0.1536.824" timestamp="1583278808084" />
+    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1583189580176">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1583189580176" />
+    <state width="555" height="334" key="GridCell.Tab.0.bottom" timestamp="1583891879626">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="555" height="334" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1583891879626" />
+    <state width="555" height="334" key="GridCell.Tab.0.center" timestamp="1583891879625">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="555" height="334" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1583891879625" />
+    <state width="555" height="334" key="GridCell.Tab.0.left" timestamp="1583891879625">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="555" height="334" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1583891879625" />
+    <state width="555" height="334" key="GridCell.Tab.0.right" timestamp="1583891879625">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="555" height="334" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1583891879625" />
+    <state width="564" height="696" key="GridCell.Tab.1.bottom" timestamp="1583855825089">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="564" height="696" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1583855825089" />
+    <state width="564" height="696" key="GridCell.Tab.1.center" timestamp="1583855825089">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="564" height="696" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1583855825089" />
+    <state width="564" height="696" key="GridCell.Tab.1.left" timestamp="1583855825089">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="564" height="696" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1583855825089" />
+    <state width="564" height="696" key="GridCell.Tab.1.right" timestamp="1583855825089">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="564" height="696" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1583855825089" />
+    <state x="602" y="123" key="RollbackChangesDialog" timestamp="1583289857221">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="602" y="123" key="RollbackChangesDialog/0.0.1536.824@0.0.1536.824" timestamp="1583289857221" />
+    <state x="277" y="54" key="SettingsEditor" timestamp="1583275928585">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="277" y="54" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1583275928585" />
+    <state width="775" height="419" key="XDebugger.FullValuePopup" timestamp="1583759230668">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="775" height="419" key="XDebugger.FullValuePopup/0.0.1536.824@0.0.1536.824" timestamp="1583759230668" />
+    <state x="431" y="145" key="search.everywhere.popup" timestamp="1583198258967">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="431" y="145" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1583198258967" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
